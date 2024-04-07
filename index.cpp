@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<vector>
 using namespace std;
 class Shopping{
     protected:
@@ -11,9 +12,7 @@ class Shopping{
     public :
         void menu();
         void administrator();
-        void buyer(){
-            
-        } 
+        void buyer();
         void add();
         void edit();
         void rem();
@@ -221,9 +220,114 @@ void Shopping::rem()
     }
 }
 
-void Shopping :: list(){
 
+void Shopping :: buyer(){
+    m:
+    int choice;
+    cout<<"\t\t\t Buyer Menu\n";
+    cout<<"\t\t\t 1) Buy Product\n";
+    cout<<"\t\t\t 2) Go Back\n";
+    cin>>choice;
+
+    switch(choice){
+        case 1: 
+            reciept();
+            break;
+        case 2:
+            menu();
+        default : 
+            cout<<"Invalid choice\n";
+            break;
+    }
+    goto m;
 }
+
+void Shopping::reciept(){
+    
+    cout << "\033[2J\033[1;1H";
+    fstream data;
+    vector<int> arrc,arrq;
+
+    char choice;
+    int c = 0;
+    float amount = 0;
+    float dis = 0;
+    float total = 0;
+    cout<<"\t\t Reciept\n";
+    data.open("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt",ios::in);
+
+    if(!data){
+        cout<<"\tEmpty Database\n";
+    }else{
+        data.close();
+        list();
+        
+        cout<<"\t\t Place the order\n";
+
+        do{
+            m:
+            cout<<"\t\t Product code\n";
+            int code;
+            cin>>code;
+            arrc.push_back(code);
+            cout<<"\t\t Product Quantity\n";
+            int qty;
+            cin>>qty;
+            arrq.push_back(qty);
+            for(int i=0;i<(int)arrq.size()-1;i++){
+                if(arrc.back() == arrc[i]){
+                    cout<<"\tDuplicate Product code Try Again !\n";
+                    goto m;
+                }
+            }
+
+            cout<<"\tWant to buy any another product y for Yes n for No : \n";
+            cin>>choice;
+        }while(choice == 'y');
+
+        cout << "\033[2J\033[1;1H";
+        cout<<"\t\t Reciept \t\t\n";
+        
+        cout << "\nProduct num\tProduct Name\tQuantity\tPrice\tAmount\tAmount with discount\n";
+        int size = (int)arrc.size();
+    
+        for (int i = 0; i < size; i++) {
+            fstream data;
+            data.open("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt", ios::in);
+            data >> pcode >> pname >> p >> d;
+            while (!data.eof()) {
+                if (pcode == arrc[i]) {
+                    amount = p * arrq[i];
+                    cout<<(amount*d)/100;
+                    dis = amount - ((amount * d) / 100);
+                    total = total + dis;
+                    cout << "\n" << pcode << "\t\t" << pname << "\t\t\t" << arrq[i] << "\t" << p << "\t" << amount << "\t\t" << dis << "\n";
+                }
+                data >> pcode >> pname >> p >> d;
+            }
+            data.close();
+        }
+
+        cout << "\n\n\n-----------------------\n";
+        cout << "\t\t Total Amount : \t" << total << "\n";
+    }
+    
+}
+void Shopping :: list(){
+    fstream data;
+    data.open("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt",ios::in);
+    cout<<"\n\n|___________________________________________________________\n";
+    cout<<"ProNo\t\tName\t\tPrice\n";
+    cout<<"\n\n|___________________________________________________________\n";
+    data>>pcode>>pname>>p>>d;
+    while(!data.eof())
+    {
+        cout<<pcode<<"\t\t"<<pname<<"\t\t"<<p<<"\n";
+        data>>pcode>>pname>>p>>d;
+    }
+    data.close();
+}
+
 int main(){
     Shopping s;
     s.menu();
