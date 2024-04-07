@@ -16,10 +16,7 @@ class Shopping{
         } 
         void add();
         void edit();
-        void rem()
-        {
-
-        }
+        void rem();
         void list();
         void reciept();
 };
@@ -179,7 +176,50 @@ void Shopping :: edit(){
     }
 }
 
-
+void Shopping::rem()
+{
+    
+    fstream data,data1;
+    int pkey;
+    int token=0;
+    cout<<"\n\n\t Delete product";
+    cout<<"\n\n\t Product code :";
+    cin>>pkey;
+    data.open("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt", ios::in);
+    if(!data)
+    {
+        cout<<"File doesnt exist";
+        
+    }
+    
+    else{
+        data1.open("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data1.txt",ios::app|ios::out);
+        data>>pcode>>pname>>p>>d;
+        while(!data.eof())
+        {
+            if(pcode==pkey)
+            {
+                cout<<"\n\n\t Product deleted succesfully";
+                token++;
+            }
+            else 
+            {
+                data1<<" "<<pcode<<" "<<pname<<" "<<p<<" "<<d<<"\n";
+                
+            }
+            data>>pcode>>pname>>p>>d;
+        }
+        data.close();
+        data1.close();
+        remove("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt");
+        rename("/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data1.txt","/Users/harishyashwantbendale/Desktop/OOP Git 2/Billing-System-CPP/data.txt");
+        
+        if(token==0)
+        {
+            cout<<"\n\n Record not found";
+        }
+    }
+}
 
 void Shopping :: list(){
 
